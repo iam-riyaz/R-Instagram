@@ -12,6 +12,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { connectDB } from './db/db.js';
 import {register} from "./controller/auth.js"
+import {router} from "./routes/auth.js"
 
 // configuration------
 const __filename=fileURLToPath(import.meta.url);
@@ -32,7 +33,7 @@ const storage= multer.diskStorage({
         cd(null, "./public/assets");
     },
     filename:function(req, file,cd){
-        cd(null, file.originalname);
+        cd(null, Date.now()+ file.originalname);
     }
 });
 
@@ -45,6 +46,10 @@ app.get("/", async(req,res)=>{
 
 // ROUTES WITH FILE------------   
 app.post("/auth/register", upload.single("picturePath"), register)
+
+
+// ROUTES
+app.use("/auth", router)
 
 
 
