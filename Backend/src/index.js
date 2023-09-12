@@ -11,8 +11,8 @@ import path from 'path';
 
 import { fileURLToPath } from 'url';
 import { connectDB } from './db/db.js';
-import {register} from "./controller/auth.js"
-import {router} from "./routes/auth.js"
+import {register} from "./controller/user.controller.js"
+import {userRouter} from "./routes/user.route.js"
 
 // configuration------
 const __filename=fileURLToPath(import.meta.url);
@@ -23,7 +23,7 @@ app.use(express.json({limit:"30mb", extended:true}))
 app.use(express.urlencoded({limit:"30mb",extended:true}))
 app.use(helmet())
 app.use(helmet.crossOriginResourcePolicy({policy:"cross-origin"}))
-app.use(morgan("common"))
+// app.use(morgan("common"))
 app.use(cors())
 app.use("/assets", express.static(path.join(__dirname,"public/assets")));
 
@@ -37,7 +37,7 @@ const storage= multer.diskStorage({
     }
 });
 
-const upload=multer({storage})
+ export const upload=multer({storage})
 
 app.get("/", async(req,res)=>{
     console.log("Uploading")
@@ -45,11 +45,11 @@ app.get("/", async(req,res)=>{
 })
 
 // ROUTES WITH FILE------------   
-app.post("/auth/register", upload.single("picturePath"), register)
+app.post("/users/register", upload.single("picturePath"), register)
 
 
-// ROUTES
-app.use("/auth", router)
+// ROUTES for USER
+app.use("/users", userRouter)
 
 
 
