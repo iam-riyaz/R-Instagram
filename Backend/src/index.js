@@ -13,6 +13,14 @@ import { fileURLToPath } from 'url';
 import { connectDB } from './db/db.js';
 import {register} from "./controller/user.controller.js"
 import {userRouter} from "./routes/user.route.js"
+import { verifyToken } from './middleware/authorization.js';
+import { postsRouter } from './routes/posts.route.js';
+import { User } from './models/User.js';
+import { posts, users } from './data/index.js';
+import { Post } from './models/Post.js';
+import { createPost } from './controller/posts.controller.js';
+
+
 
 // configuration------
 const __filename=fileURLToPath(import.meta.url);
@@ -45,11 +53,16 @@ app.get("/", async(req,res)=>{
 })
 
 // ROUTES WITH FILE------------   
-app.post("/users/register", upload.single("picturePath"), register)
+app.post("/register", upload.single("picturePath"), register)
+
+app.post("/posts/create" , verifyToken, upload.single("postPath"),createPost)
 
 
 // ROUTES for USER
 app.use("/users", userRouter)
+
+// ROUTE of POST
+app.use("/posts", postsRouter )
 
 
 
@@ -59,5 +72,9 @@ connectDB().then(()=>{
 
     app.listen( PORT, ()=>{
         console.log(`server is listening on port ${PORT}`)
+
+    //    ONE TIME DATA INSERT
+        // User.insertMany(users)
+        // Post.insertMany(posts)
     })
 })

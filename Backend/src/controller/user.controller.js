@@ -136,3 +136,4 @@ export const addRemoveFriends= async (req, res) => {
     res.status(400).send({message:err.message});
   }
 }
+
