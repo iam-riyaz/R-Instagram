@@ -1,7 +1,10 @@
+import Navbar from "../navbar/index.jsx"
+
 export const HomePage=()=>{
     return(
         <div>
-            Homepage
+           
+            <Navbar/>
         </div>
     )
 }
