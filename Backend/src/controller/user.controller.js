@@ -4,7 +4,6 @@ import { User } from "../models/User.js";
 
 // REGISTER USER
 export const register = async (req, res) => {
-    const picturePath=req.file.filename
   try {
     const {
       firstName,
@@ -14,6 +13,7 @@ export const register = async (req, res) => {
       occupation,
       friends,
       location,
+      picturePath,
     } = req.body;
 
     const salt = await bcrypt.genSalt();
@@ -40,79 +40,70 @@ export const register = async (req, res) => {
 };
 
 // LOGGING IN
-export const login= async (req,res)=>{
-    try{
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-        const {email, password}=req.body
+    const user = await User.findOne({ email: email });
 
-        const user= await User.findOne({email: email})
-        
-        if(!user){
-            return res.status(400).send({message:"user not found"})
-        }
-
-        const isPasswordMatch= await bcrypt.compare(password,user.password);
-        if(!isPasswordMatch){
-            return res.status(400).send({message:"password is incorrect"})
-        }
-        
-        const token= jwt.sign({id:user._id}, process.env.JWT_SECRET)
-         delete user.password
-       
-        res.status(200).send({token, user})
-
-
+    if (!user) {
+      return res.status(400).send({ message: "user not found" });
     }
-    catch(err){
-        res.status(400).send({message:err.message});
+
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    if (!isPasswordMatch) {
+      return res.status(400).send({ message: "password is incorrect" });
     }
-}
 
-export const getUser= async (req, res) => {
-  try{
-     const {id}= req.params;
-    const user= await User.findById(id)
-    res.status(200).send({staus:"success", user:user})
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    delete user.password;
 
+    res.status(200).send({ token, user });
+  } catch (err) {
+    res.status(400).send({ message: err.message });
   }
-  catch(err){
-    res.status(400).send({message:err.message});
+};
+
+export const getUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    res.status(200).send({ staus: "success", user: user });
+  } catch (err) {
+    res.status(400).send({ message: err.message });
   }
-}
+};
 
-export const getUserFriends= async (req, res) => {
-  try{
-
-    const {id}= req.params;
-    const user= await User.findById(id);
+export const getUserFriends = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
 
     const friends = await Promise.all(
-      user.friends.map((id)=>User.findById(id))
+      user.friends.map((id) => User.findById(id))
     );
 
-    const formattedFriends= friends.map(({_id,firstName, lastName, occupation, location, picturePath})=>{
-      return({_id,firstName,lastName,occupation,location, picturePath})
-
-    })
-     res.status(200).send({formattedFriends})
+    const formattedFriends = friends.map(
+      ({ _id, firstName, lastName, occupation, location, picturePath }) => {
+        return { _id, firstName, lastName, occupation, location, picturePath };
+      }
+    );
+    res.status(200).send({ formattedFriends });
+  } catch (err) {
+    res.status(400).send({ message: err.message });
   }
-  catch(err){
-    res.status(400).send({message:err.message});
-  }
-}
+};
 
-export const addRemoveFriends= async (req, res) => {
-  try{
-     
-    const {id,friendId}= req.params;
-    const user= await User.findById(id)
-    const friend= await User.findById(friendId)
+export const addRemoveFriends = async (req, res) => {
+  try {
+    const { id, friendId } = req.params;
+    const user = await User.findById(id);
+    const friend = await User.findById(friendId);
 
-    if(user.friends.includes(friendId)){
-      user.friends= user.friends.filter((id)=>id!==friendId);
-      friend.friends= friend.friends.filter((id)=>id!==id);
-    }
-    else{
+    if (user.friends.includes(friendId)) {
+      user.friends = user.friends.filter((id) => id !== friendId);
+      friend.friends = friend.friends.filter((id) => id !== id);
+    } else {
       user.friends.push(friendId);
       friend.friends.push(id);
     }
@@ -120,20 +111,17 @@ export const addRemoveFriends= async (req, res) => {
     await user.save();
     await friend.save();
 
-
     const friends = await Promise.all(
-      user.friends.map((id)=>User.findById(id))
+      user.friends.map((id) => User.findById(id))
     );
 
-    const formattedFriends= friends.map(({_id,firstName, lastName, occupation, location, picturePath})=>{
-      return({_id,firstName,lastName,occupation,location, picturePath})
-
-    })
-     res.status(200).send({formattedFriends})
-
+    const formattedFriends = friends.map(
+      ({ _id, firstName, lastName, occupation, location, picturePath }) => {
+        return { _id, firstName, lastName, occupation, location, picturePath };
+      }
+    );
+    res.status(200).send({ formattedFriends });
+  } catch (err) {
+    res.status(400).send({ message: err.message });
   }
-  catch(err){
-    res.status(400).send({message:err.message});
-  }
-}
-
+};

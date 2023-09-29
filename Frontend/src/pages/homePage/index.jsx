@@ -1,11 +1,12 @@
+import { Box } from "@mui/material"
 import Navbar from "../navbar/index.jsx"
 
 export const HomePage=()=>{
     return(
-        <div>
+        <Box>
            
             <Navbar/>
             home page
-        </div>
+        </Box>
     )
 }

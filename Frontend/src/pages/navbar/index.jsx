@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import {
   Box,
@@ -22,7 +21,7 @@ import {
   Close,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import  { setMode, setLogout } from "../../state/index.js";
+import { setMode, setLogout } from "../../state/index.js";
 
 import { FlexBetween } from "../../components/FlexBetween.jsx";
 import { useNavigate } from "react-router-dom";
@@ -31,8 +30,8 @@ const Navbar = () => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) =>  state.user);
- 
+  const user = useSelector((state) => state.user);
+
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
   const theme = useTheme();
@@ -42,29 +41,27 @@ const Navbar = () => {
   const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
 
-  let fullName="Riyaz Ahmad"
-  if(user){
-
-     fullName = `${user.firstName } ${user.lastName}` 
+  let fullName = "Riyaz Ahmad";
+  if (user) {
+    fullName = `${user.firstName} ${user.lastName}`;
   }
-  
 
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
       <FlexBetween gap="1.75rem">
         <Typography
+          style={{
+            background:
+              "-webkit-linear-gradient(20deg, #527dff 10%, #c62dde 30%, #d87b41 60%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            cursor: "pointer",
+          }}
           fontWeight="bold"
           fontSize="clamp(1rem, 2rem, 2.25rem)"
-          color="primary"
           onClick={() => navigate("/home")}
-          sx={{
-            "&:hover": {
-              color: primaryLight,
-              cursor: "pointer",
-            },
-          }}
         >
-          R-instagram
+          R-Instagram
         </Typography>
         {isNonMobileScreens && (
           <FlexBetween
@@ -94,11 +91,9 @@ const Navbar = () => {
           <Message sx={{ fontSize: "25px" }} />
           <Notifications sx={{ fontSize: "25px" }} />
           <Help sx={{ fontSize: "25px" }} />
-          <FormControl variant="standard" 
-          // value={fullName}
-          >
+          <FormControl variant="standard" value={fullName}>
             <Select
-              // value={fullName}
+              value={fullName}
               sx={{
                 backgroundColor: neutralLight,
                 width: "150px",
@@ -205,5 +200,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
