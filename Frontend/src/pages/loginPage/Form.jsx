@@ -46,7 +46,7 @@ const initialValuesLogin = {
   password: "",
 };
 
-const Form = () => {
+export const Form = () => {
   const [pageType, setPageType] = useState("login");
   const { palette } = useTheme();
   const dispatch = useDispatch();
@@ -59,9 +59,9 @@ const Form = () => {
     // this allows us to send form info with image
     const formData = new FormData();
     for (let value in values) {
-        if(value!="picture"){
+        
       formData.append(value, values[value]);
-        }
+        
     }
     formData.append("picturePath", values.picture.name);
 
@@ -80,7 +80,7 @@ const Form = () => {
     }
   };
 
-  const login = async (values, onSubmitProps) => {
+   const login = async (values, onSubmitProps) => {
     const loggedInResponse = await fetch("http://localhost:2001/users/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -274,4 +274,3 @@ const Form = () => {
   );
 };
 
-export default Form;

@@ -26,7 +26,7 @@ import { setMode, setLogout } from "../../state/index.js";
 import { FlexBetween } from "../../components/FlexBetween.jsx";
 import { useNavigate } from "react-router-dom";
 
-const Navbar = () => {
+export const Navbar = () => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -199,4 +199,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+

@@ -9,6 +9,7 @@ import morgan from "morgan"
 import path from 'path';
 
 
+
 import { fileURLToPath } from 'url';
 import { connectDB } from './db/db.js';
 import {register} from "./controller/user.controller.js"
@@ -31,9 +32,10 @@ app.use(express.json({limit:"30mb", extended:true}))
 app.use(express.urlencoded({limit:"30mb",extended:true}))
 app.use(helmet())
 app.use(helmet.crossOriginResourcePolicy({policy:"cross-origin"}))
-// app.use(morgan("common"))
+app.use(morgan("common"))
 app.use(cors())
 app.use("/assets", express.static(path.join(__dirname,"public/assets")));
+app.use(express.static('public'));
 
 // FILE STORAGE --------------------------------
 const storage= multer.diskStorage({
@@ -41,7 +43,7 @@ const storage= multer.diskStorage({
         cd(null, "./public/assets");
     },
     filename:function(req, file,cd){
-        cd(null, Date.now()+ file.originalname);
+        cd(null,file.originalname);
     }
 });
 
@@ -53,7 +55,7 @@ app.get("/", async(req,res)=>{
 })
 
 // ROUTES WITH FILE------------   
-app.post("/register", upload.single("picturePath"), register)
+app.post("/register", upload.single("picture"), register)
 
 app.post("/posts/create" , verifyToken, upload.single("postPath"),createPost)
 
