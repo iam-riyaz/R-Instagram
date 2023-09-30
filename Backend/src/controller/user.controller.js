@@ -88,7 +88,7 @@ export const getUserFriends = async (req, res) => {
         return { _id, firstName, lastName, occupation, location, picturePath };
       }
     );
-    res.status(200).send({ formattedFriends });
+    res.status(200).send(formattedFriends);
   } catch (err) {
     res.status(400).send({ message: err.message });
   }
@@ -120,7 +120,7 @@ export const addRemoveFriends = async (req, res) => {
         return { _id, firstName, lastName, occupation, location, picturePath };
       }
     );
-    res.status(200).send({ formattedFriends });
+    res.status(200).send( formattedFriends );
   } catch (err) {
     res.status(400).send({ message: err.message });
   }

@@ -57,8 +57,7 @@ app.get("/", async(req,res)=>{
 // ROUTES WITH FILE------------   
 app.post("/register", upload.single("picture"), register)
 
-app.post("/posts/create" , verifyToken, upload.single("postPath"),createPost)
-
+app.post("/posts/create" , verifyToken, upload.single("picture"),createPost)
 
 // ROUTES for USER
 app.use("/users", userRouter)

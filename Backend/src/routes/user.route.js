@@ -14,6 +14,6 @@ userRouter.get("/:id", verifyToken, userController.getUser)
 userRouter.get("/:id/friends", verifyToken, userController.getUserFriends)
 
 // UPDATE
-userRouter.patch("/:id", verifyToken, userController.addRemoveFriends);
+userRouter.patch("/:id/:friendId", verifyToken, userController.addRemoveFriends);
 
 
