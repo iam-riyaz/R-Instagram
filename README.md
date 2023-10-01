@@ -8,5 +8,10 @@
 **MongoDB**
 **ReactJS**
 
+# features 
+- User can sign up
+- login with username and password
+
+
 
 
