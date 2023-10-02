@@ -11,7 +11,7 @@ import path from 'path';
 
 
 import { fileURLToPath } from 'url';
-import { connectDB } from './db/db.js';
+import { connectDB } from './config/db.js';
 import {register} from "./controller/user.controller.js"
 import {userRouter} from "./routes/user.route.js"
 import { verifyToken } from './middleware/authorization.js';
