@@ -52,7 +52,19 @@ import {
         body: formData,
       });
       const posts = await response.json();
-      dispatch(setPosts({ posts }));
+
+      let sortedData = posts.post;
+    sortedData = sortedData.map((e) => {
+      e["timestamp"] = Date.parse(e.createdAt);
+      return e;
+    });
+    sortedData = sortedData.sort((a, b) => b.timestamp - a.timestamp);
+
+    dispatch(setPosts({ posts: sortedData }));
+
+
+      
+
       setImage(null);
       setPost("");
     };

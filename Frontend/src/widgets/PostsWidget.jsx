@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "../state/index.js";
-import {PostWidget} from "./PostWidget";
+import { PostWidget } from "./PostWidget";
 
- export const PostsWidget = ({ userId, isProfile = false }) => {
+export const PostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts);
   const token = useSelector((state) => state.token);
+
 
   const getPosts = async () => {
     const response = await fetch("http://localhost:2001/posts", {
@@ -14,35 +15,49 @@ import {PostWidget} from "./PostWidget";
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await response.json();
-    
-    dispatch(setPosts({ posts: data }));
+
+    let sortedData = data.post;
+    sortedData = sortedData.map((e) => {
+      e["timestamp"] = Date.parse(e.createdAt);
+      return e;
+    });
+    sortedData = sortedData.sort((a, b) => b.timestamp - a.timestamp);
+
+    dispatch(setPosts({ posts: sortedData }));
   };
 
   const getUserPosts = async () => {
-    const response = await fetch(
-      `http://localhost:2001/posts/${userId}`,
-      {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+    const response = await fetch(`http://localhost:2001/posts/${userId}`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
     const data = await response.json();
-    dispatch(setPosts({ posts: data }));
+   
+
+    let sortedData = data.post;
+    sortedData = sortedData.map((e) => {
+      e["timestamp"] = Date.parse(e.createdAt);
+      return e;
+    });
+    sortedData = sortedData.sort((a, b) => b.timestamp - a.timestamp);
+
+    dispatch(setPosts({ posts: sortedData }));
   };
 
   useEffect(() => {
     if (isProfile) {
       getUserPosts();
     } else {
-        
       getPosts();
+      
+      
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  console.log({posts})
   return (
+   
     <>
-      {posts.post.map(
+      {posts.map(
         ({
           _id,
           userId,
@@ -72,4 +87,3 @@ import {PostWidget} from "./PostWidget";
     </>
   );
 };
-

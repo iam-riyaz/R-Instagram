@@ -19,9 +19,7 @@ export const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
-  console.log({friends})
-//   IMPORTANT
-//  this needs to be solve 
+ 
   const isFriend = friends.find((friend) => friend._id === friendId);
 
   const patchFriend = async () => {
@@ -67,7 +65,7 @@ export const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
           </Typography>
         </Box>
       </FlexBetween>
-      <IconButton
+      {_id!==friendId?<IconButton
         onClick={() => patchFriend()}
         sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
       >
@@ -76,7 +74,7 @@ export const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
         ) : (
           <PersonAddOutlined sx={{ color: primaryDark }} />
         )}
-      </IconButton>
+      </IconButton>:null}
     </FlexBetween>
   );
 };
