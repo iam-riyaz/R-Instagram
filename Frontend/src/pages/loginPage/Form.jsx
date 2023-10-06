@@ -15,6 +15,8 @@ import { useDispatch } from "react-redux";
 import { setLogin } from "../../state/index.js";
 import Dropzone from "react-dropzone";
 import {FlexBetween} from "../../components/FlexBetween.jsx";
+import { firebaseStorage } from "../../config/firebase.config.js";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
@@ -63,6 +65,20 @@ export const Form = () => {
       formData.append(value, values[value]);
         
     }
+    const pictureData=values.picture
+
+    const storageRef = ref(firebaseStorage, `/test/${pictureData.name}`);
+
+    uploadBytes(storageRef, pictureData).then((res)=>{
+      getDownloadURL(res.ref).then((url)=>{
+
+        
+        console.log("Downloading/view able url:",url)
+      })
+    })
+
+
+
     formData.append("picturePath", values.picture.name);
 
     const savedUserResponse = await fetch(
