@@ -47,30 +47,27 @@ export const getUserPosts = async (req, res) => {
 };
 
 // UPDATE
-export const likePost= async (req, res) => {
+export const likePost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { userId } = req.body;
+    const post = await Post.findById(id);
+    const isLiked = post.likes.get(userId);
 
-  try{
-
-    const {id}= req.params;
-    const {userId}= req.body;
-    const post =await Post.findById(id);
-    const isLiked=post.likes.get(userId)
-
-    if(isLiked){
+    if (isLiked) {
       post.likes.delete(userId);
-      
-    }
-    else{
-      post.likes.set(userId, true)
+    } else {
+      post.likes.set(userId, true);
     }
 
-    const updatedPost= await Post.findByIdAndUpdate(id, {likes:post.likes},{new:true})
+    const updatedPost = await Post.findByIdAndUpdate(
+      id,
+      { likes: post.likes },
+      { new: true }
+    );
 
-    res.status(200).send({updatedPost})
-
-  }
-  catch(err) {
+    res.status(200).send(updatedPost);
+  } catch (err) {
     res.status(400).send({ message: err.message });
   }
-
-}
+};
