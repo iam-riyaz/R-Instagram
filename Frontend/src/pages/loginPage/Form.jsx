@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../../state/index.js";
 import Dropzone from "react-dropzone";
-import {FlexBetween} from "../../components/FlexBetween.jsx";
+import { FlexBetween } from "../../components/FlexBetween.jsx";
 import { firebaseStorage } from "../../config/firebase.config.js";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
@@ -61,42 +61,32 @@ export const Form = () => {
     // this allows us to send form info with image
     const formData = new FormData();
     for (let value in values) {
-        
       formData.append(value, values[value]);
-        
     }
-    const pictureData=values.picture
 
-    const storageRef = ref(firebaseStorage, `/test/${pictureData.name}`);
+    // To Upload image to firebase storage----------
+    const pictureData = values.picture;
+    const storageRef = ref(firebaseStorage, `/users/${Date.now()+pictureData.name}`);
+    const uploadBtyesVariable = await uploadBytes(storageRef, pictureData);
+    const downloadUrl = await getDownloadURL(uploadBtyesVariable.ref);
+    // -------
 
-    uploadBytes(storageRef, pictureData).then((res)=>{
-      getDownloadURL(res.ref).then((url)=>{
+    formData.append("picturePath", downloadUrl);
 
-        
-        console.log("Downloading/view able url:",url)
-      })
-    })
-
-
-
-    formData.append("picturePath", values.picture.name);
-
-    const savedUserResponse = await fetch(
-      "http://localhost:2001/register",
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
+    const savedUserResponse = await fetch("http://localhost:2001/register", {
+      method: "POST",
+      body: formData,
+    });
     const savedUser = await savedUserResponse.json();
     onSubmitProps.resetForm();
 
+    console.log({ savedUser });
     if (savedUser) {
       setPageType("login");
     }
   };
 
-   const login = async (values, onSubmitProps) => {
+  const login = async (values, onSubmitProps) => {
     const loggedInResponse = await fetch("http://localhost:2001/users/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -289,4 +279,3 @@ export const Form = () => {
     </Formik>
   );
 };
-
