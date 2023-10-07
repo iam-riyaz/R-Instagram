@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
 import multer from "multer";
 import helmet from "helmet";
@@ -13,12 +12,7 @@ import { register } from "./controller/user.controller.js";
 import { userRouter } from "./routes/user.route.js";
 import { verifyToken } from "./middleware/authorization.js";
 import { postsRouter } from "./routes/posts.route.js";
-import { User } from "./models/User.js";
-import { posts, users } from "./data/index.js";
-import { Post } from "./models/Post.js";
 import { createPost } from "./controller/posts.controller.js";
-import { firebaseStorage } from "./config/firebase.js";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 // configuration------
 const __filename = fileURLToPath(import.meta.url);
@@ -62,32 +56,6 @@ app.use("/users", userRouter);
 
 // ROUTE of POST
 app.use("/posts", postsRouter);
-
-// TESTING for Firebase
-app.post("/test", upload.single("img"), async (req, res) => {
-  try {
-    const storageRef = ref(firebaseStorage, `/test/${req.file.originalname}`);
-
-    uploadBytes(storageRef, req.file.buffer)
-      .then((e) => {
-        getDownloadURL(e.ref).then(url=>{
-          console.log({url})
-          res.status(201).send({data:e,downloadURL:url})
-          return
-        }).catch((e) => {
-          res.status(500).send({error:"error uploading file and geting url"})
-          return
-        })
-
-        
-      })
-      .catch((err) => {
-        res.status(500).send({ "err":"error occured while uploading file to firebase" });
-      });
-  } catch (err) {
-    res.status(400).send({ err:"internal error" });
-  }
-});
 
 const PORT = process.env.PORT || 2001;
 
