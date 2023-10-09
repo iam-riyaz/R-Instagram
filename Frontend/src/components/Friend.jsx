@@ -24,7 +24,7 @@ export const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
 
   const patchFriend = async () => {
     const response = await fetch(
-      `http://localhost:2001/users/${_id}/${friendId}`,
+      `https://r-instagram-web.onrender.com/${_id}/${friendId}`,
       {
         method: "PATCH",
         headers: {
