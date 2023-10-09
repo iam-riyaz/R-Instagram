@@ -57,7 +57,7 @@ export const MyPostWidget = ({ picturePath }) => {
       formData.append("picturePath", downloadUrl);
     }
 
-    const response = await fetch(`http://localhost:2001/posts/create`, {
+    const response = await fetch(`https://r-instagram-web.onrender.com/posts/create`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
       body: formData,
