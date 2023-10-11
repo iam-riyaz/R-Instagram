@@ -17,6 +17,7 @@ import Dropzone from "react-dropzone";
 import { FlexBetween } from "../../components/FlexBetween.jsx";
 import { firebaseStorage } from "../../config/firebase.config.js";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { BackdropLoading } from "../../components/loading/BackdropLoading.jsx";
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
@@ -53,11 +54,13 @@ export const Form = () => {
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isLoading,setIsLoading] = useState(false)
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
 
   const register = async (values, onSubmitProps) => {
+    setIsLoading(true)
     // this allows us to send form info with image
     const formData = new FormData();
     for (let value in values) {
@@ -80,13 +83,17 @@ export const Form = () => {
     const savedUser = await savedUserResponse.json();
     onSubmitProps.resetForm();
 
+    if(savedUser){setIsLoading(false)}
     console.log({ savedUser });
     if (savedUser) {
+      
       setPageType("login");
+     
     }
   };
 
   const login = async (values, onSubmitProps) => {
+    setIsLoading((e)=>!e)
     const loggedInResponse = await fetch("https://r-instagram-web.onrender.com/users/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -94,6 +101,9 @@ export const Form = () => {
     });
     const loggedIn = await loggedInResponse.json();
     onSubmitProps.resetForm();
+    if(loggedIn){
+      setIsLoading(false)
+    }
     if (loggedIn) {
       dispatch(
         setLogin({
@@ -111,6 +121,7 @@ export const Form = () => {
   };
 
   return (
+    <>
     <Formik
       onSubmit={handleFormSubmit}
       initialValues={isLogin ? initialValuesLogin : initialValuesRegister}
@@ -277,5 +288,8 @@ export const Form = () => {
         </form>
       )}
     </Formik>
+    {isLoading?<BackdropLoading/>:null}
+    </>
+    
   );
 };
