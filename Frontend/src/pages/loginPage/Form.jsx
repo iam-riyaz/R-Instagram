@@ -73,7 +73,7 @@ export const Form = () => {
 
     formData.append("picturePath", downloadUrl);
 
-    const savedUserResponse = await fetch("http://localhost:2001/register", {
+    const savedUserResponse = await fetch("https://r-instagram-web.onrender.com/register", {
       method: "POST",
       body: formData,
     });
@@ -87,7 +87,7 @@ export const Form = () => {
   };
 
   const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch("http://localhost:2001/users/login", {
+    const loggedInResponse = await fetch("https://r-instagram-web.onrender.com/users/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
