@@ -18,6 +18,7 @@ import { FlexBetween } from "../../components/FlexBetween.jsx";
 import { firebaseStorage } from "../../config/firebase.config.js";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { BackdropLoading } from "../../components/loading/BackdropLoading.jsx";
+import { AlertSnackbars } from "../../components/alert/AlertSnackbars.jsx";
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
@@ -51,6 +52,7 @@ const initialValuesLogin = {
 
 export const Form = () => {
   const [pageType, setPageType] = useState("login");
+  const [isPasswordWrong, setIsPasswordWrong] = useState(false)
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -73,6 +75,7 @@ export const Form = () => {
     const uploadBtyesVariable = await uploadBytes(storageRef, pictureData);
     const downloadUrl = await getDownloadURL(uploadBtyesVariable.ref);
     // -------
+
 
     formData.append("picturePath", downloadUrl);
 
@@ -103,6 +106,11 @@ export const Form = () => {
     onSubmitProps.resetForm();
     if(loggedIn){
       setIsLoading(false)
+    }
+    if(!loggedIn){
+      setIsLoading(false)
+      setIsPasswordWrong(true)
+    
     }
     if (loggedIn) {
       dispatch(
@@ -289,6 +297,7 @@ export const Form = () => {
       )}
     </Formik>
     {isLoading?<BackdropLoading/>:null}
+    {isPasswordWrong?<AlertSnackbars/>:null}
     </>
     
   );
