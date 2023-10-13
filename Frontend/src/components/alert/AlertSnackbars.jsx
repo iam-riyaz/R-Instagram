@@ -8,7 +8,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={3} ref={ref} variant="filled" {...props} />;
 });
 
-export  function AlertSnackbars() {
+export  function AlertSnackbars({message}) {
   const [open, setOpen] = React.useState(true);
 
   // const handleClick = () => {
@@ -27,7 +27,7 @@ export  function AlertSnackbars() {
       
       <Snackbar open={open} autoHideDuration={6000} >
         <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          Password is incorrect try again with correct password
+         {message}
         </Alert>
       </Snackbar>
       {/* <Alert severity="error">This is an error message!</Alert>
