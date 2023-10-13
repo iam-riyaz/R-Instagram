@@ -27,7 +27,7 @@ export const PostsWidget = ({ userId, isProfile = false }) => {
   };
 
   const getUserPosts = async () => {
-    const response = await fetch(`http://localhost:2001/posts/${userId}`, {
+    const response = await fetch(`https://r-instagram-web.onrender.com/posts/${userId}`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
     });
