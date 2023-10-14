@@ -52,7 +52,11 @@ const initialValuesLogin = {
 
 export const Form = () => {
   const [pageType, setPageType] = useState("login");
-  const [isPasswordWrong, setIsPasswordWrong] = useState(false);
+  const [isSnackbar, setIsSnackbar] = useState(false);
+  const [message, setMessage] = useState(
+    "Email or Password is incorrect try again with currect credentials"
+  );
+  const [type, setType] = useState("error");
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -88,14 +92,22 @@ export const Form = () => {
         body: formData,
       }
     );
-    const savedUser = await savedUserResponse.json();
-    onSubmitProps.resetForm();
 
-    if (savedUser) {
+    const savedUser = await savedUserResponse.json();
+
+    if (!savedUserResponse.ok) {
+      setIsSnackbar(true);
+      setMessage("Email Already Registered try with different email address");
+      setType("error");
       setIsLoading(false);
     }
-    console.log({ savedUser });
-    if (savedUser) {
+
+    if (savedUserResponse.ok) {
+      onSubmitProps.resetForm();
+      setIsSnackbar(true);
+      setMessage("User successfully registered");
+      setType("success");
+      setIsLoading(false);
       setPageType("login");
     }
   };
@@ -114,7 +126,7 @@ export const Form = () => {
 
     if (loggedInResponse.ok == false) {
       setIsLoading(false);
-      setIsPasswordWrong(true);
+      setIsSnackbar(true);
     }
 
     if (loggedInResponse.ok) {
@@ -287,7 +299,7 @@ export const Form = () => {
               <Typography
                 onClick={() => {
                   setPageType(isLogin ? "register" : "login");
-                  setIsPasswordWrong(false);
+                  setIsSnackbar(false);
                   resetForm();
                 }}
                 sx={{
@@ -308,13 +320,7 @@ export const Form = () => {
         )}
       </Formik>
       {isLoading ? <BackdropLoading /> : null}
-      {isPasswordWrong ? (
-        <AlertSnackbars
-          message={
-            "Email or Password is incorrect try again with currect credentials"
-          }
-        />
-      ) : null}
+      {isSnackbar ? <AlertSnackbars message={message} type={type} /> : null}
     </>
   );
 };
