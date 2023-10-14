@@ -124,7 +124,7 @@ export const Form = () => {
     );
     const loggedIn = await loggedInResponse.json();
 
-    if (loggedInResponse.ok == false) {
+    if (!loggedInResponse.ok) {
       setIsLoading(false);
       setIsSnackbar(true);
     }
