@@ -26,12 +26,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "../state/index.js";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { firebaseStorage } from "../config/firebase.config.js";
+import { PostsLoading } from "../components/loading/PostsLoading.jsx";
 
 export const MyPostWidget = ({ picturePath }) => {
   const dispatch = useDispatch();
   const [isImage, setIsImage] = useState(false);
   const [image, setImage] = useState(null);
   const [post, setPost] = useState("");
+  const [postsLoading, setPostsLoading] = useState(false)
   const { palette } = useTheme();
   const { _id } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
@@ -40,6 +42,7 @@ export const MyPostWidget = ({ picturePath }) => {
   const medium = palette.neutral.medium;
 
   const handlePost = async () => {
+    setPostsLoading(true)
     const formData = new FormData();
     formData.append("userId", _id);
     formData.append("description", post);
@@ -64,6 +67,11 @@ export const MyPostWidget = ({ picturePath }) => {
     });
     const posts = await response.json();
 
+    if(response.ok)
+    {
+      setPostsLoading(false)
+    }
+
     let sortedData = posts.post;
     sortedData = sortedData.map((e) => {
       e["timestamp"] = Date.parse(e.createdAt);
@@ -78,6 +86,7 @@ export const MyPostWidget = ({ picturePath }) => {
   };
 
   return (
+    <>
     <WidgetWrapper>
       <FlexBetween gap="1.5rem">
         <UserImage image={picturePath} />
@@ -187,5 +196,7 @@ export const MyPostWidget = ({ picturePath }) => {
         </Button>
       </FlexBetween>
     </WidgetWrapper>
+      {postsLoading?<PostsLoading/>:null}
+    </>
   );
 };
