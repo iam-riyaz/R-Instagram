@@ -59,6 +59,11 @@ app.use("/posts", postsRouter);
 
 const PORT = process.env.PORT || 2001;
 
+// this will make deployed server in running stage updated in every 5 MINUTES
+setInterval(()=>{
+  console.log("server updated")
+},1000*60*5)
+
 connectDB().then(() => {
   app.listen(PORT, () => {
     console.log(`server is listening on port ${PORT}`);
