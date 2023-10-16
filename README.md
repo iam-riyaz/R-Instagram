@@ -3,6 +3,8 @@
 
 A personalized social media app user have to register along with profile image, user can make friends in the application, post imgae along with title and other user can like their posts.
 
+### Note- While using live link plaese wait a while, because backend take some time to start as backend deployed with free service of render.com
+
 
 ## Features
 
