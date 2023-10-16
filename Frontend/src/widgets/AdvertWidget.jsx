@@ -20,7 +20,7 @@ export const AdvertWidget = () => {
         width="100%"
         height="auto"
         alt="advert"
-        src="http://localhost:2001/assets/info4.jpeg"
+        src="https://sslimages.shoppersstop.com/sys-master/root/ha1/h14/31078686523422/NARS_BeautyPage_categorycollectionNARS_Main%20%28Big%20Banner%29_web_091023.jpg"
         style={{ borderRadius: "0.75rem", margin: "0.75rem 0" }}
       />
       <FlexBetween>
