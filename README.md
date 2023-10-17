@@ -5,6 +5,16 @@ A personalized social media app user have to register along with profile image, 
 
 ### Note- While using live link plaese wait a while, because backend take some time to start as backend deployed with free service of render.com
 
+## Screenshot
+![image](https://github.com/iam-riyaz/R-com-project/assets/97458162/4c052bc2-c487-4a38-9e8a-ea3adc518821)
+![image](https://github.com/iam-riyaz/R-com-project/assets/97458162/b1520f6d-6857-486d-8cc9-5fcf1e677402)
+![image](https://github.com/iam-riyaz/R-com-project/assets/97458162/0fdb19c5-e474-47f0-93dd-d593e4c92794)
+![image](https://github.com/iam-riyaz/R-com-project/assets/97458162/e71b8fbc-954f-4796-a1bd-de951ff56397)
+
+
+
+
+
 
 ## Features
 
